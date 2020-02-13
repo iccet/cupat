@@ -5,7 +5,10 @@ Matrix = Iterable[Vector]
 
 # noinspection PyTypeChecker
 class Matrix:
-    """
+    """ Matrix methods implementation
+    transpose,
+    det (available in SqMatrix)
+    add, mul, div, matmul
     """
     _varr: List[Vector] = None  # vectors array
 
@@ -95,17 +98,7 @@ class Matrix:
         self = self @ matrix
         return self
 
-    def _is_matrix(*matrices):
-        matrix_count = len(matrices)
-
-        for i in range(matrix_count):
-            m = len(matrices[i][0])
-            for j in range(len(matrices[i])):
-                m1 = len(matrices[i][j])
-                if m1 != m:
-                    raise IndexError("Non matrix", m, m1)
-
-    def _row_swap(self, i, k):
+    def _rows_swap(self, i, k):
         n = len(self) - 1
         if i > n or k > n:
             raise IndexError("Impossible to change non-existent rows.")
@@ -113,13 +106,24 @@ class Matrix:
             self[i], self[k] = self[k], self[i]
             return self
 
-    def _row_sum(self, i, k):
+    def _rows_sum(self, i, k):
         n = len(self)
-        self[i] = Vector(self[k][j] + self[i][j] for j in range(n))
-        return self
+        if i > n or k > n:
+            raise IndexError("Impossible to change non-existent rows.")
+        else:
+            self[i] = Vector(self[k][j] + self[i][j] for j in range(n))
+            return self
 
     def _row_mul(self, i, k):
-        return list(map(lambda j: k * j, self[i]))
+        n = len(self)
+        if i > n:
+            raise IndexError("Impossible to change non-existent row.")
+        else:
+            self[i] = Vector(map(lambda j: k * j, self[i]))
+            return self
+
+    def swap_row(self, i, row):
+        self[i] = Vector(row)
 
     @staticmethod
     def _minor(m, i):
@@ -127,13 +131,6 @@ class Matrix:
         keys = [sorted([(i + p) % n for p in range(1, n)]) for j in range(1, n)]
         return [[m[j][keys[j - 1][p - 1]] for p in range(1, n)]
                 for j in range(1, n)]
-
-    @classmethod
-    def mul_pipeline(cls, *matrices):
-        result_matrix = matrices[0]
-        for next_matrix in matrices[1:]:
-            result_matrix *= next_matrix
-        return result_matrix
 
     def transposed(self):
         return Matrix(*[Vector(self[j][i] for j in range(len(self))) for i in range(len(self[0]))])
@@ -159,7 +156,9 @@ class SqMatrix(Matrix):
 
     def det(self):
         n = len(self)
-        if n == 2:
+        if n == 1:
+            return self[0]
+        elif n == 2:
             return self._2x2_det(self)
         elif n == 3:
             return self._3x3_det(self)
@@ -168,21 +167,32 @@ class SqMatrix(Matrix):
 
     @staticmethod
     def _2x2_det(m):
-        return float(m[0][0] * m[1][1] - m[0][1] * m[1][0])
+        return m[0][0] * m[1][1] - m[0][1] * m[1][0]
 
     @staticmethod
     def _3x3_det(m):
         n = len(m)
-        return float(sum(
+        return sum(
             SqMatrix._k(i) * m[0][i] * SqMatrix._2x2_det(
                 Matrix._minor(m, i)
-            ) for i in range(n)
-        ))
+            ) for i in range(n))
 
     @staticmethod
     def _nxn_det(m):
         n = len(m)
         if n < 5:
-            return float(sum(SqMatrix._k(i) * m[0][i] * SqMatrix._3x3_det(Matrix._minor(m, i)) for i in range(n)))
+            return sum(SqMatrix._k(i) * m[0][i] * SqMatrix._3x3_det(Matrix._minor(m, i)) for i in range(n))
         else:
-            return float(sum(SqMatrix._k(i) * m[0][i] * SqMatrix._nxn_det(Matrix._minor(m, i)) for i in range(n)))
+            return sum(SqMatrix._k(i) * m[0][i] * SqMatrix._nxn_det(Matrix._minor(m, i)) for i in range(n))
+
+
+def solve(matrix: SqMatrix, res: Vector):
+    """ Cramer's rule """
+    mdet = abs(matrix)
+    tm = matrix.transposed()
+    d = []
+    for i in range(len(matrix)):
+        m = SqMatrix(*tm)
+        m.swap_row(i, res)
+        d.append(SqMatrix(*m.transpose()).det())
+    return [d[i] / mdet for i in range(len(matrix))]

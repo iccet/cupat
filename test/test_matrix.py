@@ -1,4 +1,4 @@
-from src.core.modules._matrix import Matrix, SqMatrix
+from src.core.modules._matrix import Matrix, SqMatrix, solve
 import unittest
 
 
@@ -27,7 +27,7 @@ class MatrixTestCase(unittest.TestCase):
                                                       [0, 1, 87]))
 
     def test_len(self):
-        self.assertEqual(self.m_a, 3)
+        self.assertEqual(len(self.m_a), 3)
 
     def test_mul(self):
         self.assertEqual(self.m_a * 2, Matrix([2 * 15, 2 * 2, 2 * 0],
@@ -53,18 +53,26 @@ class MatrixTestCase(unittest.TestCase):
                                   [6, 3, 8]).det(), -97)
 
     def test_row_op(self):
-        self.assertEqual(self.m_a._row_swap(0, 1), SqMatrix([88, 33, 1],
-                                                            [15, 2, 0],
-                                                            [76, 3, 87]))
-        self.assertEqual(self.m_a._row_swap(0, 2), SqMatrix([76, 3, 87],
+        self.assertEqual(self.m_a._rows_swap(0, 1), SqMatrix([88, 33, 1],
+                                                             [15, 2, 0],
+                                                             [76, 3, 87]))
+        self.assertEqual(self.m_a._rows_swap(0, 2), SqMatrix([76, 3, 87],
+                                                             [15, 2, 0],
+                                                             [88, 33, 1]))
+        self.assertEqual(self.m_a._rows_sum(0, 2), SqMatrix([164, 36, 88],
                                                             [15, 2, 0],
                                                             [88, 33, 1]))
-        self.assertEqual(self.m_a._row_sum(0, 2), SqMatrix([164, 36, 88],
-                                                           [15, 2, 0],
-                                                           [88, 33, 1]))
+        self.assertEqual(self.m_b._row_mul(0, 2), Matrix([28, 404],
+                                                         [34, 87],
+                                                         [28, 9]))
         with self.assertRaises(IndexError):
-            self.m_b._row_swap(4, 1)
-            self.m_b._row_swap(3, 1)
+            self.m_b._rows_swap(4, 1)
+            self.m_b._rows_swap(3, 1)
+
+    def test_solve(self):
+        self.assertEqual(solve(SqMatrix([2, 5, 4],
+                                        [1, 3, 2],
+                                        [2, 10, 9]), [30, 150, 110]), [-152, 270, -254])
 
 
 if __name__ == '__main__':

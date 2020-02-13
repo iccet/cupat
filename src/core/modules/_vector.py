@@ -7,7 +7,7 @@ Vector = Iterable[List[T]]
 
 # noinspection PyTypeChecker
 class Vector:
-    """ Vector[T] methods implementation
+    """ Vector methods implementation
     translation :
         Vector[T](self) on Vector[T](other)
          __add__(), __iadd__() : with '+' sign
