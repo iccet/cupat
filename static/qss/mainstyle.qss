@@ -1,0 +1,30 @@
+QMainWindow {
+  background-color: #31363b; }
+
+QPushButton {
+  background-color: #2980b9;
+  border-radius: 10px;
+  border-style: outset;
+  border-color: #eff0f1;
+  color: #eff0f1;
+  font: bold 14px;
+  min-width: 10em;
+  padding: 6px; }
+
+QPushButton:hover {
+  border-width: 2px;
+  border-color: #28dfff; }
+
+QPushButton:pressed {
+  background-color: #2494ea;
+  border-color: #268C52;
+  border-style: inset; }
+
+QLabel {
+  color: #eff0f1;
+  font: bold 14px; }
+
+QLCDNumber {
+  color: #eff0f1; }
+
+/*# sourceMappingURL=style.css.map */

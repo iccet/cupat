@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAEA,WAAW;EACP,gBAAgB,ECSb,OAAO;;ACVd,WAAW;EACP,gBAAgB,EDDb,OAAO;ECEV,aAAa,EAAE,IAAI;EACnB,YAAY,EAAE,MAAM;EACpB,YAAY,EDQR,OAAO;ECPX,KAAK,EDOD,OAAO;ECNX,IAAI,EAAE,SAAS;EACf,SAAS,EAAE,IAAI;EACf,OAAO,EAAE,GAAG;;AAEhB,iBAAiB;EACb,YAAY,EAAE,GAAG;EACjB,YAAY,EDXJ,OAAO;;ACanB,mBAAmB;EACf,gBAAgB,EDbP,OAAO;ECchB,YAAY,EDVR,OAAO;ECWX,YAAY,EAAE,KAAK;;ACjBvB,MAAM;EACF,KAAK,EFWD,OAAO;EEVX,IAAI,EAAE,SAAS;;ACFnB,UAAU;EACN,KAAK,EHWD,OAAO",
+"sources": ["../sass/qmainwindow.sass","../sass/base.sass","../sass/qpushbutton.sass","../sass/qlabel.sass","../sass/qlcdnumber.sass"],
+"names": [],
+"file": "style.css"
+}
