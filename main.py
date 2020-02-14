@@ -5,7 +5,7 @@ import subprocess
 
 
 def main():
-    subprocess.call("./ui_convert.sh")
+    subprocess.call(["./scripts/ui_convert.sh", "static/ui", "src/gui/ui_generated"])
     app = QApplication([])
     windows = MainWindow()
     windows.show()

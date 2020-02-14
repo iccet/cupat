@@ -15,7 +15,7 @@ class PhysicObject(BaseObject):
     __collision_shape: list = None
     __collision_box: list = None
 
-    def __init__(self, name: str = None, position=None, collision_shape: list = None, mass=5):
+    def __init__(self, name: str = None, position=None, collision_shape: list = None, mass=.5):
         super().__init__(name, position)
         self.__collision_shape = [(Vector(point) + self.position) for point in collision_shape]
         self.__mass_vector = self._calc_center_mass()
@@ -36,29 +36,29 @@ class PhysicObject(BaseObject):
     def collision(self):
         return self.__collision_shape
 
-    @collision.setter
-    def collision(self, shape: list):
-        self.__collision_shape = shape
-
     @property
     def collision_box(self):
         return self.__collision_box
-
-    @speed.setter
-    def speed(self, v):
-        self.__speed_vector = v
 
     @property
     def move_vector(self):
         return self.__speed_vector.target
 
-    @move_vector.setter
-    def move_vector(self, _l: list):
-        self.__speed_vector.target = Vector(_l)
-
     @property
     def acceleration(self):
         return self.__acceleration_vector
+
+    @collision.setter
+    def collision(self, shape: list):
+        self.__collision_shape = shape
+
+    @speed.setter
+    def speed(self, v):
+        self.__speed_vector = v
+
+    @move_vector.setter
+    def move_vector(self, _l: list):
+        self.__speed_vector.target = Vector(_l)
 
     @acceleration.setter
     def acceleration(self, v):
@@ -88,32 +88,28 @@ class PhysicObject(BaseObject):
             _f = self.move_vector
             self.speed.force += (_f - _pos) * CCC
 
-    def _inertial_impact(self, _ols):
+    def _inertial_impact(self):
         """ Sum of all actor inertial force momentum """
-        # refactor for mass depend
-        # self.acceleration.force = -(self.speed.force - _ols) * self.__mass
-        self.acceleration.force = -self.speed.force * CCC * self.__mass
+        _old_speed = self.speed.force.copy()
+        _new_mass_vector = self.__mass_vector.copy()
+        self.__mass_vector = self._calc_center_mass()
+        _moment_vector = self.__mass_vector - _new_mass_vector
+        self.speed.force += _moment_vector * CCC
 
+        self.acceleration.force = -(self.speed.force - _old_speed) / self.__mass
         if self.speed.force != self.acceleration.force:
             self.speed.force += self.acceleration.force
 
     def _update_collision(self):
         _pos = self.position
         _f = self.move_vector
-
         self.__mass_vector = self._calc_center_mass()
 
-        _new_mass_vector = self.__mass_vector.copy()
         _a = Vector.angle_between_vectors(self.__mass_vector - _pos, _f - _pos)
         _a += math.pi
 
         self.collision = [(Vector(point) + self.speed.force).rotate(_a, _pos) for point in self.collision]
         self.geometry = [(Vector(point) + self.speed.force).rotate(_a, _pos) for point in self.geometry]
-
-        # moment inertia, move from this!!!
-        self.__mass_vector = self._calc_center_mass()
-        _moment_vector = self.__mass_vector - _new_mass_vector
-        self.speed.force += _moment_vector * CCC
 
     def _update_collision_box(self):
         _xar = [i[0] for i in self.collision]
@@ -132,12 +128,12 @@ class PhysicObject(BaseObject):
             self.speed.force += other * CCC
 
     def update(self):
-        _old_speed = self.speed.force.copy()
         self._control_impact()
-        self._inertial_impact(_old_speed)
+        self._inertial_impact()
         self.speed.update()
         self.acceleration.update()
         self.position += self.speed.force
-        self.move_vector += self.speed.force
+        # self.move_vector += self.speed.force
         self._update_collision()
         self._update_collision_box()
+

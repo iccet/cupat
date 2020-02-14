@@ -1,9 +1,9 @@
 from abc import abstractmethod, ABC
 from .core.obj._base import BASIC_SHAPES
 
-from .content.player import Player
-from .content.wall import Wall
-from .content.random_force import RandomForce
+from .templates.player import Player
+from .templates.wall import Wall
+from .templates.random_force import RandomForce
 from .core.net.client import Client
 
 

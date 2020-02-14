@@ -1,4 +1,5 @@
 from typing import List, TypeVar, Iterator, Iterable
+from cached_property import cached_property
 import math
 
 T = TypeVar('T', int, float, complex)
@@ -60,6 +61,10 @@ class Vector:
             except ZeroDivisionError:
                 return 0
 
+    @cached_property
+    def abs(self):
+        return abs(self)
+
     def __init__(self, *args, _sup_arr: list = (1, 0)) -> Vector[T]:
         self._carr = []
         try:
@@ -71,7 +76,7 @@ class Vector:
         self.__null_vector = [0 for _ in self._carr]
 
     def __str__(self):
-        return " ".join(str(i) for i in self)
+        return "<" + ", ".join(map(str, self)) + ">"
 
     def __getitem__(self, item):
         return self._carr[item]
@@ -134,6 +139,9 @@ class Vector:
 
     def to_list(self) -> list:
         return list(self)
+
+    def to_tuple(self) -> list:
+        return tuple(self)
 
     def __eq__(self, other) -> bool:
         if self.is_collinear(self, other):

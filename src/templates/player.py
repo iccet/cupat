@@ -17,6 +17,13 @@ class Player(Actor):
         super().__init__(name, color, position, shape, shape)
         self.track_color = track_color
 
+    # def __new__(cls, *args, **kwargs):
+    #     if cls.instance is None:
+    #         cls.instance = super(Player, cls).__new__(cls, *args, **kwargs)
+    #     else:
+    #         raise ValueError("Player already created.")
+    #     return cls.instance
+
     def __call__(self, *args, **kwargs):
         if Player.instance is None:
             Player.instance = self.__init__(*args, **kwargs)

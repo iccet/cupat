@@ -13,7 +13,7 @@ class VectorTestCase(unittest.TestCase):
     v_ab_div = Vector([15 / 14, 2 / 202])
 
     def test_str(self):
-        self.assertEqual("15 2", str(self.v_a))
+        self.assertEqual("<15, 2>", str(self.v_a))
 
     def test_abs(self):
         self.assertAlmostEqual(15.1327459504, abs(self.v_a))
@@ -56,10 +56,10 @@ class VectorTestCase(unittest.TestCase):
         v_res = self.v_a.copy()
 
         v_res = self.v_a ** -1
-        self.assertEqual(v_res, Vector([1/15, 1 / 2]))
+        self.assertEqual(v_res, Vector([1 / 15, 1 / 2]))
 
         v_res = self.v_a ** -5
-        self.assertEqual(v_res, Vector([15**-5, 2**-5]))
+        self.assertEqual(v_res, Vector([15 ** -5, 2 ** -5]))
 
     def test_div(self):
         v_res = self.v_a.copy()

@@ -1,4 +1,5 @@
 from ._vector import Vector
+from ._matrix import SqMatrix
 from abc import ABC, abstractmethod
 
 

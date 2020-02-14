@@ -1,13 +1,13 @@
-from ._vector import Vector, Iterable, List, Iterator
+from ._vector import Vector, Iterable, List, Iterator, T
 
 Matrix = Iterable[Vector]
+SqMatrix = Matrix
 
 
 # noinspection PyTypeChecker
 class Matrix:
     """ Matrix methods implementation
     transpose,
-    det (available in SqMatrix)
     add, mul, div, matmul
     """
     _varr: List[Vector] = None  # vectors array
@@ -40,9 +40,6 @@ class Matrix:
 
     def __pos__(self) -> Matrix:
         return self
-
-    def to_list(self) -> list:
-        return list(list(i) for i in self)
 
     def __eq__(self, other) -> bool:
         if len(self) != len(other) or len(self[0]) != len(other[0]):
@@ -80,8 +77,8 @@ class Matrix:
         self = self / other
         return self
 
-    def copy(self) -> Matrix:
-        return Matrix(*self._varr.copy())
+    def to_list(self) -> list:
+        return list(list(i) for i in self)
 
     def __copy__(self) -> Matrix:
         return self.copy()
@@ -115,22 +112,14 @@ class Matrix:
             return self
 
     def _row_mul(self, i, k):
-        n = len(self)
-        if i > n:
+        if i > len(self):
             raise IndexError("Impossible to change non-existent row.")
         else:
             self[i] = Vector(map(lambda j: k * j, self[i]))
             return self
 
-    def swap_row(self, i, row):
-        self[i] = Vector(row)
-
-    @staticmethod
-    def _minor(m, col, row=0):
-        n = len(m[0])
-        keys = [sorted([(col + p) % n for p in range(1, n)]) for j in range(1, n)]
-        return [[m[j][keys[j - 1][p - 1]] for p in range(1, n)]
-                for j in range(1, n)]
+    def swap_row(self, index, row: list):
+        self[index] = Vector(row)
 
     def transposed(self):
         return Matrix(*[Vector(self[j][i] for j in range(len(self))) for i in range(len(self[0]))])
@@ -141,37 +130,23 @@ class Matrix:
 
 
 class SqMatrix(Matrix):
-    """
+    """ SqMatrix methods implementation
+    det
+    reverse
     """
     __E = None  # alias for unit matrix
 
-    def __init__(self, *args):
-        super().__init__(*args)
+    @staticmethod
+    def _minor(m, col, row=0):
+        n = len(m)
+        col_keys = [sorted([(col + j) % n for j in range(1, n)]) for i in range(1, n)]
+        row_keys = sorted([[(row + i) % n for j in range(1, n)] for i in range(1, n)])
+        return [[m[row_keys[i][j]][col_keys[i][j]] for j in range(n - 1)]
+                for i in range(n - 1)]
 
     @staticmethod
-    def _k(i): return 1 if i % 2 == 0 else -1
-
-    def __abs__(self) -> float:
-        return self.det()
-
-    def det(self):
-        n = len(self)
-        if n == 1:
-            return self[0]
-        elif n == 2:
-            return self._2x2_det(self)
-        elif n == 3:
-            return self._3x3_det(self)
-        else:
-            return self._nxn_det(self)
-
-    def __reversed__(self):
-        d = self.det()
-        m = self.__matrix_from_minors().transposed() / d
-        # return m
-
-    def __matrix_from_minors(self):
-        return SqMatrix(*[Matrix._minor(self, i, j) for j in range(len(self))for i in range(len(self))])
+    def _k(i):
+        return 1 if i % 2 == 0 else -1
 
     @staticmethod
     def _2x2_det(m):
@@ -182,57 +157,89 @@ class SqMatrix(Matrix):
         n = len(m)
         return sum(
             SqMatrix._k(i) * m[0][i] * SqMatrix._2x2_det(
-                Matrix._minor(m, i)
+                SqMatrix._minor(m, i)
             ) for i in range(n))
 
     @staticmethod
     def _nxn_det(m):
         n = len(m)
         if n < 5:
-            return sum(SqMatrix._k(i) * m[0][i] * SqMatrix._3x3_det(Matrix._minor(m, i)) for i in range(n))
+            return sum(SqMatrix._k(i) * m[0][i] * SqMatrix._3x3_det(SqMatrix._minor(m, i)) for i in range(n))
         else:
-            return sum(SqMatrix._k(i) * m[0][i] * SqMatrix._nxn_det(Matrix._minor(m, i)) for i in range(n))
+            return sum(SqMatrix._k(i) * m[0][i] * SqMatrix._nxn_det(SqMatrix._minor(m, i)) for i in range(n))
+
+    def __init__(self, *args) -> SqMatrix:
+        super().__init__(*args)
+
+    def __abs__(self) -> T:
+        return self.det()
+
+    def __reversed__(self) -> SqMatrix:
+        d = abs(self)
+        if d == 0:
+            return None
+        return self.__matrix_from_minors().transpose() / d
+
+    def __matrix_from_minors(self) -> SqMatrix:
+        n = len(self)
+        return SqMatrix(*[
+            [SqMatrix._k(i + j) * abs(SqMatrix(*SqMatrix._minor(self, j, i))) for j in range(n)] for i in range(n)
+        ])
+
+    def det(self) -> T:
+        n = len(self)
+        if n == 1:
+            return self[0][0]
+        elif n == 2:
+            return self._2x2_det(self)
+        elif n == 3:
+            return self._3x3_det(self)
+        else:
+            return self._nxn_det(self)
 
 
-def _sq_solve(m: SqMatrix, r: Vector):
-    """ Cramer's rule """
-    mdet = abs(m)
-    tm = m.transposed()
-    d = []
-    for i in range(len(m)):
-        m = SqMatrix(*tm)
-        m.swap_row(i, r)
-        d.append(SqMatrix(*m.transpose()).det())
-    return [d[i] / mdet for i in range(len(m))]
-
-
-def _rev_solve(m: SqMatrix, r: Vector):
-    """ Reverse matrix method
-    (just in case)
-    """
+def _shared_solve(matrix: Matrix, res: Vector):
+    """ Gaussian elimination """
     return
 
 
-def _shared_solve(matrix: SqMatrix, res: Vector):
+def _rev_solve(matrix: SqMatrix, res: Vector):
+    """ Reverse matrix method """
+    return list(*(reversed(matrix) @ SqMatrix(*res)).transpose())
+
+
+def _sq_solve(matrix: SqMatrix, res: Vector):
     """ Cramer's rule """
     mdet = abs(matrix)
+    if mdet == 0:
+        return None
     d = []
     for i in range(len(matrix)):
         m = SqMatrix(*matrix)
         for j in range(len(matrix)):
-            m[i][j] = res[j]
+            m[j][i] = res[j]
         d.append(m.det())
     return [d[i] / mdet for i in range(len(matrix))]
 
 
-def solve(matrix: SqMatrix, res: list):
-    if isinstance(matrix, SqMatrix):
-        return _sq_solve(matrix, res)
+def solve(matrix: Matrix, res: list, **kwargs):
+    method = kwargs.get("method", None)
+    if method is None:
+        if isinstance(matrix, SqMatrix):
+            return _sq_solve(matrix, res)
+        else:
+            return _shared_solve(matrix, res)
     else:
-        _shared_solve(matrix, res)
+        return method(matrix, res)
 
+
+solve_methods = {
+    "reverse_matrix": _rev_solve,
+    "cramer_rule": _sq_solve,
+    "gauss": _shared_solve
+}
 
 __all__ = [
-    "solve",
+    "solve", "solve_methods",
     "SqMatrix", "Matrix"
 ]
