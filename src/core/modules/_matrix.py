@@ -28,9 +28,9 @@ class Matrix:
         for i in self._varr:
             yield i
 
-    def __reversed__(self):
-        for i in range(len(self._varr), 0, -1):
-            yield self._varr[i]
+    def __round__(self, n=None):
+        self = Matrix(*map(round, self))
+        return self
 
     def __len__(self) -> int:
         return len(self._varr)
@@ -126,9 +126,9 @@ class Matrix:
         self[i] = Vector(row)
 
     @staticmethod
-    def _minor(m, i):
+    def _minor(m, col, row=0):
         n = len(m[0])
-        keys = [sorted([(i + p) % n for p in range(1, n)]) for j in range(1, n)]
+        keys = [sorted([(col + p) % n for p in range(1, n)]) for j in range(1, n)]
         return [[m[j][keys[j - 1][p - 1]] for p in range(1, n)]
                 for j in range(1, n)]
 
@@ -165,6 +165,14 @@ class SqMatrix(Matrix):
         else:
             return self._nxn_det(self)
 
+    def __reversed__(self):
+        d = self.det()
+        m = self.__matrix_from_minors().transposed() / d
+        # return m
+
+    def __matrix_from_minors(self):
+        return SqMatrix(*[Matrix._minor(self, i, j) for j in range(len(self))for i in range(len(self))])
+
     @staticmethod
     def _2x2_det(m):
         return m[0][0] * m[1][1] - m[0][1] * m[1][0]
@@ -186,13 +194,45 @@ class SqMatrix(Matrix):
             return sum(SqMatrix._k(i) * m[0][i] * SqMatrix._nxn_det(Matrix._minor(m, i)) for i in range(n))
 
 
-def solve(matrix: SqMatrix, res: Vector):
+def _sq_solve(m: SqMatrix, r: Vector):
+    """ Cramer's rule """
+    mdet = abs(m)
+    tm = m.transposed()
+    d = []
+    for i in range(len(m)):
+        m = SqMatrix(*tm)
+        m.swap_row(i, r)
+        d.append(SqMatrix(*m.transpose()).det())
+    return [d[i] / mdet for i in range(len(m))]
+
+
+def _rev_solve(m: SqMatrix, r: Vector):
+    """ Reverse matrix method
+    (just in case)
+    """
+    return
+
+
+def _shared_solve(matrix: SqMatrix, res: Vector):
     """ Cramer's rule """
     mdet = abs(matrix)
-    tm = matrix.transposed()
     d = []
     for i in range(len(matrix)):
-        m = SqMatrix(*tm)
-        m.swap_row(i, res)
-        d.append(SqMatrix(*m.transpose()).det())
+        m = SqMatrix(*matrix)
+        for j in range(len(matrix)):
+            m[i][j] = res[j]
+        d.append(m.det())
     return [d[i] / mdet for i in range(len(matrix))]
+
+
+def solve(matrix: SqMatrix, res: list):
+    if isinstance(matrix, SqMatrix):
+        return _sq_solve(matrix, res)
+    else:
+        _shared_solve(matrix, res)
+
+
+__all__ = [
+    "solve",
+    "SqMatrix", "Matrix"
+]

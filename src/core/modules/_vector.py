@@ -87,6 +87,10 @@ class Vector:
         for i in range(len(self._carr), 0, -1):
             yield self._carr[i]
 
+    def __round__(self, n=None):
+        self = Vector(*map(round, self))
+        return self
+
     def __len__(self) -> int:
         return len(self._carr)
 

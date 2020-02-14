@@ -1,4 +1,4 @@
-from modules._vector import Vector
+from ._vector import Vector
 from abc import ABC, abstractmethod
 
 

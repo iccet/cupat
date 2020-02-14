@@ -56,3 +56,13 @@ class Ui_GameFrame(object):
         self.forceVectorLabel.setText(_translate("GameFrame", "Force"))
         self.readyPushBtn.setText(_translate("GameFrame", "Ready"))
         self.speedLabel.setText(_translate("GameFrame", "Speed"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    GameFrame = QtWidgets.QFrame()
+    ui = Ui_GameFrame()
+    ui.setupUi(GameFrame)
+    GameFrame.show()
+    sys.exit(app.exec_())

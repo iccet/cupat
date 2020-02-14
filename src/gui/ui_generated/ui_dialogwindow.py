@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui_generated file 'dialogwindow.ui_generated'
+# Form implementation generated from reading ui file 'static/ui/dialogwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
@@ -19,7 +19,7 @@ class Ui_Dialog(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Dialog.sizePolicy().hasHeightForWidth())
         Dialog.setSizePolicy(sizePolicy)
-        Dialog.setFocusPolicy(QtCore.Qt.StrongFocus)
+        Dialog.setFocusPolicy(QtCore.Qt.ClickFocus)
         Dialog.setWindowTitle("")
         Dialog.setModal(True)
         self.verticalLayout = QtWidgets.QVBoxLayout(Dialog)
@@ -45,3 +45,13 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         pass
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    ui = Ui_Dialog()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())

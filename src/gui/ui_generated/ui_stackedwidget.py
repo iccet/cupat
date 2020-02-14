@@ -264,3 +264,13 @@ class Ui_StackedWidget(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.networkTab), _translate("StackedWidget", "Network"))
         self.statisticSubMenuLabel.setText(_translate("StackedWidget", "Statistic:"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.profileTab), _translate("StackedWidget", "Profile"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    StackedWidget = QtWidgets.QStackedWidget()
+    ui = Ui_StackedWidget()
+    ui.setupUi(StackedWidget)
+    StackedWidget.show()
+    sys.exit(app.exec_())
