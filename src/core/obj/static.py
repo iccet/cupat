@@ -1,13 +1,14 @@
-from ._physic import PhysicObject, Vector
+from .physic import PhysicObject, Vector
 
 
-class DynamicObject(PhysicObject):
+class StaticObject(PhysicObject):
 
     def in_collision(self, other):
-        super().in_collision(other)
-
-    def on_external_impact(self, other):
         pass
+
+    def on_external_impact(self, *others):
+        for other in others:
+            super().in_collision(other)
 
     def _update_collision(self):
         _pos = self.position
@@ -19,3 +20,4 @@ class DynamicObject(PhysicObject):
     def update(self):
         self._update_collision()
         self._update_collision_box()
+

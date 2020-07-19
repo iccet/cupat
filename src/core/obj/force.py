@@ -1,9 +1,11 @@
-from ._base import *
-from ._render import *
+from .base import *
+from .render import *
+from samples.colors import Colors
+import math
 
-FORCE_DEFAULT_VECTOR_COLOR = FDVC = WHITE
-FORCE_PARASITE_VECTOR_COLOR = FPVC = RED
-FORCE_RANDOM_VECTOR_COLOR = FRVC = MAGENTA
+FORCE_DEFAULT_VECTOR_COLOR = FDVC = Colors.WHITE
+FORCE_PARASITE_VECTOR_COLOR = FPVC = Colors.RED
+FORCE_RANDOM_VECTOR_COLOR = FRVC = Colors.MAGENTA
 
 
 class Force(BaseObject, RenderObject):
@@ -52,11 +54,11 @@ class Force(BaseObject, RenderObject):
     def update(self):
         self.position = self._root.center_mass
 
-    def draw_geometry(self, qpainter):
+    def draw_geometry(self):
         color = QColor(self.color)
         pen = QPen(color, 1, Qt.SolidLine)
-        qpainter.setPen(pen)
-        qpainter.setBrush(color)
+        self.painter.setPen(pen)
+        self.painter.setBrush(color)
 
         _v0 = self.position
         _fvc = self.force
@@ -64,13 +66,13 @@ class Force(BaseObject, RenderObject):
         _lvr = (_v0 + (_fvc / 3) * 2).copy().rotate(math.pi / 12, _v)
         _rvr = (_v0 + (_fvc / 3) * 2).copy().rotate(-math.pi / 12, _v)
 
-        qpainter.drawLine(*_v0, *_v)
-        qpainter.drawLine(*_v, *_lvr)
-        qpainter.drawLine(*_v, *_rvr)
+        self.painter.drawLine(*_v0, *_v)
+        self.painter.drawLine(*_v, *_lvr)
+        self.painter.drawLine(*_v, *_rvr)
 
-    def render(self, qpainter):
-        self.draw_geometry(qpainter)
-        qpainter.drawLine(*self._root.position, *self.target)
+    def render(self):
+        self.draw_geometry()
+        self.painter.drawLine(*self._root.position, *self.target)
 
 
 class ParasiteForce(Force):

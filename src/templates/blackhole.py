@@ -1,4 +1,4 @@
-from src.core.obj._force import Force
+from src.core.obj.force import Force
 
 
 class BlackHole(Force):

@@ -1,5 +1,5 @@
-from ._physic import PhysicObject
-from ._render import RenderObject
+from .physic import PhysicObject
+from .render import RenderObject
 
 
 class Actor(PhysicObject, RenderObject):
@@ -17,7 +17,7 @@ class Actor(PhysicObject, RenderObject):
     def in_collision(self, other):
         PhysicObject.in_collision(self, other)
 
-    def render(self, qpainter):
-        RenderObject.render(self, qpainter)
-        self.acceleration.render(qpainter)
-        self.speed.render(qpainter)
+    def render(self):
+        RenderObject.render(self)
+        self.acceleration.render()
+        self.speed.render()

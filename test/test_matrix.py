@@ -1,4 +1,4 @@
-from src.core.modules._matrix import *
+from linalg.matrix import *
 import unittest
 
 

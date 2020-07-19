@@ -1,12 +1,12 @@
-from ..core.obj._render import *
-from ..core.obj._static import StaticObject
-from ..core.obj._render import RenderObject
-from modules._collision import elasticcollision
+from ..core.obj.static import StaticObject
+from ..core.obj.render import RenderObject
+from linalg.collision import Collision
+from samples.colors import Colors
 
-WALL_STD_COLOR = WSC = LIGHT_BLUE
-WALL_FLAT_COLOR = WFC = REGULAR_BLUE
-WALL_ELASTIC_COLOR = WEC = TURQ_BLUE
-WALL_STUCK_COLOR = WSTC = DARK_BLUE
+WALL_STD_COLOR = WSC = Colors.LIGHT_BLUE
+WALL_FLAT_COLOR = WFC = Colors.REGULAR_BLUE
+WALL_ELASTIC_COLOR = WEC = Colors.TURQ_BLUE
+WALL_STUCK_COLOR = WSTC = Colors.DARK_BLUE
 
 SQUARE_SHAPE = ((0, 0), (0, 1), (1, 1), (1, 0))
 
@@ -19,7 +19,7 @@ class Wall(StaticObject, RenderObject):
         StaticObject.__init__(self, name, position, _cs)
         RenderObject.__init__(self, color, _cs)
 
-    @elasticcollision
+    @Collision.NonElastic
     def in_collision(self, *objects):
         pass
 
@@ -27,8 +27,8 @@ class Wall(StaticObject, RenderObject):
         print("wall impact", other)
         pass
 
-    def render(self, qpainter):
-        RenderObject.render(self, qpainter)
+    def render(self):
+        RenderObject.render(self)
 
     def update(self):
         StaticObject.update(self)

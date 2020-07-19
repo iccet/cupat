@@ -1,31 +1,15 @@
 from PyQt5.QtWidgets import QMainWindow, QColorDialog
-from PyQt5.QtCore import QBasicTimer, Qt, QCoreApplication, pyqtSlot, \
-    QPropertyAnimation, QRect
+from PyQt5.QtCore import QBasicTimer, Qt, QCoreApplication, pyqtSlot, QPropertyAnimation, QRect
 from ui_mainwindow import Ui_MainWindow
 from ..widgets.stacked import StackedWidget
 from .dialog import Dialog
 from frames.game import GameFrame
+from src.templates.player import Player, BASIC_SHAPES
+from src.base_game import BaseGame
+from samples.tron import Tron
+from samples.colors import Colors
 
 FPS = 60
-
-BLUE = "#2980b9"
-RED = "#ce4250"
-ORANGE = "#f59e16"
-GREEN = "#268C52"
-MAGENTA = "#bd93f9"
-PURPLE = "#f676c0"
-
-DARK_BLUE = "#07086f"
-REGULAR_BLUE = "#0005e3"
-TURQ_BLUE = "#28dfff"
-LIGHT_BLUE = "#2494ea"
-
-GRAY = "#31363b"
-BLACK = "#23262a"
-WHITE = "#eff0f1"
-
-MAIN_COLORS = [GREEN, RED, BLUE, ORANGE, MAGENTA, PURPLE]
-BASIC_SHAPES = ("cursor", "arrow", "rocket", "triangle")
 
 
 class MainWindow(QMainWindow):
@@ -47,7 +31,10 @@ class MainWindow(QMainWindow):
         self.gameFrameInit()
 
     def gameFrameInit(self):
-        self.stackedWidget.ui.gameFrame = GameFrame(self.stackedWidget.ui.gamePage, self)
+        BaseGame.player = self.get_player()
+        GameFrame.game = Tron()
+
+        self.stackedWidget.ui.gameFrame = GameFrame(self.stackedWidget.ui.gamePage)
         self.stackedWidget.ui.gamePageaGridLayout.addWidget(self.stackedWidget.ui.gameFrame, 0, 1, 1, 1)
 
     def buttonsMapping(self):
@@ -59,8 +46,8 @@ class MainWindow(QMainWindow):
         self.stackedWidget.ui.choosePlayerTrackColorPushBtn.clicked.connect(self.choose_color)
 
     def loadContent(self):
-        self.stackedWidget.ui.playerColorComboBox.addItems(MAIN_COLORS)
-        self.stackedWidget.ui.playerTrackColorComboBox.addItems(MAIN_COLORS)
+        self.stackedWidget.ui.playerColorComboBox.addItems(Colors())
+        self.stackedWidget.ui.playerTrackColorComboBox.addItems(Colors())
         self.stackedWidget.ui.playerShapeComboBox.addItems(BASIC_SHAPES)
 
     def loadStyleSheets(self):
@@ -101,22 +88,21 @@ class MainWindow(QMainWindow):
     def choose_color(self):
         return QColorDialog.getColor()
 
-    def receive_player_position(self):
+    def get_player(self):
         _x = self.frameGeometry().width()
         _y = self.frameGeometry().height()
-        return [_x / 2, _y / 2]
+        player_position = [_x / 2, _y / 2]
 
-    def receive_player_shape(self):
-        return self.stackedWidget.ui.playerShapeComboBox.currentText()
+        player_shape = self.stackedWidget.ui.playerShapeComboBox.currentText()
+        track_color = self.stackedWidget.ui.playerTrackColorComboBox.currentText()
+        player_color = self.stackedWidget.ui.playerColorComboBox.currentText()
+        player_name = self.stackedWidget.ui.playerNameLineEdit.text()
 
-    def receive_player_name(self):
-        return self.stackedWidget.ui.playerNameLineEdit.text()
-
-    def receive_player_track_color(self):
-        return self.stackedWidget.ui.playerTrackColorComboBox.currentText()
-
-    def receive_player_color(self):
-        return self.stackedWidget.ui.playerColorComboBox.currentText()
+        return Player(position=player_position,
+                      shape=BASIC_SHAPES[player_shape],
+                      color=player_color,
+                      track_color=track_color,
+                      name=player_name)
 
     def timerEvent(self, event):
         self.update()

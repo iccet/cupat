@@ -1,28 +1,14 @@
 from abc import abstractmethod, ABC
-from .core.obj._base import BASIC_SHAPES
 
-from .templates.player import Player
-from .templates.wall import Wall
-from .templates.random_force import RandomForce
 from .core.net.client import Client
 
 
 class BaseGame(ABC):
-    _scene = None
-    _player = None
-    _gui = None
+    scene = None
+    player = None
 
-    def __init__(self, gui):
-        self._gui = gui
-        # refactor {
-        _ppos = self._gui.receive_player_position()
-        _psh = self._gui.receive_player_shape()
-        _ptc = self._gui.receive_player_track_color()
-        _pc = self._gui.receive_player_color()
-        _pn = self._gui.receive_player_name()
-        # }
-        self._player = Player(position=_ppos, shape=BASIC_SHAPES[_psh], color=_pc, track_color=_ptc, name=_pn)
-        self._players.append(self._player)
+    def __init__(self):
+        self._players.append(self.player)
 
     @abstractmethod
     def scene_init(self): pass
@@ -37,7 +23,7 @@ class BaseGame(ABC):
     def update(self): pass
 
     @abstractmethod
-    def render(self, qpainter): pass
+    def render(self): pass
 
 
 class SinglePlayerGame(BaseGame):
@@ -49,15 +35,15 @@ class SinglePlayerGame(BaseGame):
 
     def update(self): pass
 
-    def render(self, qpainter): pass
+    def render(self): pass
 
 
 class MultiPlayerGame(BaseGame):
-    _client = None
+    client = None
 
-    def __init__(self, player, gui):
-        super().__init__(player, gui)
-        self._client = Client(self._player)
+    def __init__(self):
+        super().__init__()
+        self.client = Client(self.player)
 
     def scene_init(self): pass
 
@@ -65,7 +51,7 @@ class MultiPlayerGame(BaseGame):
 
     def add_player(self, player): pass
 
-    def render(self, qpainter): pass
+    def render(self): pass
 
     def update(self):
         self.client.send()

@@ -1,5 +1,6 @@
-from ._base import *
-from ._force import Force, ParasiteForce
+from .base import *
+from .force import Force, ParasiteForce
+import math
 
 
 class PhysicObject(BaseObject):

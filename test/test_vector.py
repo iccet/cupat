@@ -1,4 +1,4 @@
-from src.core.modules._vector import Vector
+from linalg.vector import Vector
 import unittest
 
 

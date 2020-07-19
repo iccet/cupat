@@ -1,5 +1,5 @@
-from ._vector import Vector
-from ._matrix import SqMatrix
+from .vector import Vector
+from .matrix import SqMatrix
 from abc import ABC, abstractmethod
 
 
@@ -25,7 +25,7 @@ class collisionhandler(ABC):
         _oc = obj.collision_box[:2]  # obj collision box coord
 
         tx0, ty0 = _tc
-        ox0, oy0,  = _oc
+        ox0, oy0, = _oc
         tx, ty = Vector(_ts) + Vector(_tc)
         ox, oy = Vector(_os) + Vector(_oc)
 
@@ -45,24 +45,24 @@ class collisionhandler(ABC):
         pass
 
 
-class elasticcollision(collisionhandler):
+class Collision:
+    class Elastic(collisionhandler):
 
-    @staticmethod
-    def shape_collision(this, obj):
-        _tc = this.collision
-        _oc = obj.collision
-        _tcm = this.center_mass
-        _ocm = obj.center_mass
-        _ltc = len(_tc)
-        _loc = len(_oc)
+        @staticmethod
+        def shape_collision(this, obj):
+            _tc = this.collision
+            _oc = obj.collision
+            _tcm = this.center_mass
+            _ocm = obj.center_mass
+            _ltc = len(_tc)
+            _loc = len(_oc)
 
-        tvec = sorted((abs(_ocm - _tc[i]), i) for i in range(_ltc))[:2]
-        ovec = sorted((abs(_tcm - _oc[i]), i) for i in range(_loc))[:2]
-        _a = Vector.angle_between_vectors(_tc[tvec[1][1]] - _tc[tvec[0][1]], _oc[ovec[1][1]] - _oc[ovec[0][1]])
-        this.speed.force = this.speed.force.rotate(_a)
+            tvec = sorted((abs(_ocm - _tc[i]), i) for i in range(_ltc))[:2]
+            ovec = sorted((abs(_tcm - _oc[i]), i) for i in range(_loc))[:2]
+            _a = Vector.angle_between_vectors(_tc[tvec[1][1]] - _tc[tvec[0][1]], _oc[ovec[1][1]] - _oc[ovec[0][1]])
+            this.speed.force = this.speed.force.rotate(_a)
 
-
-class nonelasticcollision(collisionhandler):
-    @staticmethod
-    def shape_collision(this, obj):
-        pass
+    class NonElastic(collisionhandler):
+        @staticmethod
+        def shape_collision(this, obj):
+            pass

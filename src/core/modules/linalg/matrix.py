@@ -1,4 +1,4 @@
-from ._vector import Vector, Iterable, List, Iterator, T
+from .vector import Vector, Iterable, List, Iterator, T
 
 Matrix = Iterable[Vector]
 SqMatrix = Matrix

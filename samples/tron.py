@@ -1,4 +1,6 @@
 from src.base_game import *
+from src.templates.random_force import RandomForce
+from src.templates.wall import Wall
 
 
 class Tron(SinglePlayerGame):
@@ -6,12 +8,12 @@ class Tron(SinglePlayerGame):
     __scene_objects = []
     _random_force = None
 
-    def __init__(self, gui):
-        super().__init__(gui)
+    def __init__(self):
+        super().__init__()
         self.scene_init()
 
     def scene_init(self):
-        self._random_force = RandomForce(self._player)
+        self._random_force = RandomForce(self.player)
         self._random_force.random()
 
         wall = Wall(name="Wall", position=[100, 100], scaling=(50, 500))
@@ -33,7 +35,7 @@ class Tron(SinglePlayerGame):
         self._players.append(player)
 
     def update(self):
-        if self._player.ready:
+        if self.player.ready:
 
             self._random_force.update()
 
@@ -47,13 +49,13 @@ class Tron(SinglePlayerGame):
                 player.in_collision(player, *self._players, *self.__scene_objects)
                 player.update()
 
-    def render(self, qpainter):
-        if self._player.ready:
+    def render(self):
+        if self.player.ready:
 
             for player in self._players:
-                player.render(qpainter)
+                player.render()
 
             for obj in self.__scene_objects:
-                obj.render(qpainter)
+                obj.render()
 
-            self._random_force.render(qpainter)
+            self._random_force.render()

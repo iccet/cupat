@@ -1,8 +1,9 @@
 from PyQt5.QtWidgets import QFrame
 from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import QTimer, QBasicTimer
+
 from ui_gameframe import Ui_GameFrame
-from projects.tron import Tron
+from src.core.obj.render import RenderObject
 
 FPS = 60
 RANDOM_EVENT_INTERVAL = REI = 5000
@@ -10,12 +11,12 @@ RANDOM_EVENT_INTERVAL = REI = 5000
 
 class GameFrame(QFrame):
     game = None
-    _root = None
+    painter = QPainter()
 
-    def __init__(self, parent, root):
+    def __init__(self, parent):
         super().__init__(parent)
-        self._root = root
-        self.game = Tron(self._root)
+        RenderObject.painter = self.painter
+
         self.ui = Ui_GameFrame()
         self.ui.setupUi(self)
         self.ui.readyPushBtn.clicked.connect(self.ready)
@@ -29,29 +30,29 @@ class GameFrame(QFrame):
 
     def __del__(self):
         del self.ui
-        del self.game
         del self.timer
+        del GameFrame.game
+        del GameFrame.painter
 
     def timerEvent(self, event):
         self.game.update()
         self.update()
 
     def mouseReleaseEvent(self, QMouseEvent):
-        self.game._player.move_vector = (QMouseEvent.x(), QMouseEvent.y())
+        self.game.player.move_vector = (QMouseEvent.x(), QMouseEvent.y())
 
     def mouseMoveEvent(self, QMouseEvent):
-        self.game._player.move_vector = (QMouseEvent.x(), QMouseEvent.y())
+        self.game.player.move_vector = (QMouseEvent.x(), QMouseEvent.y())
 
     def paintEvent(self, event):
-        qp = QPainter()
-        qp.begin(self)
-        self.game.render(qp)
-        qp.end()
+        self.painter.begin(self)
+        self.game.render()
+        self.painter.end()
 
     def ready(self):
         """ readyPushBtn click event """
-        self.game._player.ready = True
+        self.game.player.ready = True
 
     def update(self):
         self.ui.forceLcdNumber.display(abs(self.game._random_force.force))
-        self.ui.speedLcdNumber.display(abs(self.game._player.speed.force))
+        self.ui.speedLcdNumber.display(abs(self.game.player.speed.force))
