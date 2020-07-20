@@ -8,8 +8,7 @@ from src.templates.player import Player, BASIC_SHAPES
 from src.base_game import BaseGame
 from samples.tron import Tron
 from samples.colors import Colors
-
-FPS = 60
+from src.core.obj.render import FPS
 
 
 class MainWindow(QMainWindow):
@@ -28,12 +27,18 @@ class MainWindow(QMainWindow):
         self.buttonsMapping()
         self.loadContent()
         self.loadStyleSheets()
-        self.gameFrameInit()
+
+    def timerEvent(self, event):
+        self.update()
+
+    def keyPressEvent(self, event):
+        key = event.key()
+        if key == Qt.Key_Escape:
+            if not self.stackedWidget.currentIndex():
+                self.exit()
+            self.stackedWidget.setCurrentIndex(0)
 
     def gameFrameInit(self):
-        BaseGame.player = self.get_player()
-        GameFrame.game = Tron()
-
         self.stackedWidget.ui.gameFrame = GameFrame(self.stackedWidget.ui.gamePage)
         self.stackedWidget.ui.gamePageaGridLayout.addWidget(self.stackedWidget.ui.gameFrame, 0, 1, 1, 1)
 
@@ -42,8 +47,8 @@ class MainWindow(QMainWindow):
         self.stackedWidget.ui.settingsPushBtn.clicked.connect(self.settings)
         self.stackedWidget.ui.trainingPushBtn.clicked.connect(self.training)
         self.stackedWidget.ui.exitPushBtn.clicked.connect(self.exit)
-        self.stackedWidget.ui.choosePlayerColorPushBtn.clicked.connect(self.choose_color)
-        self.stackedWidget.ui.choosePlayerTrackColorPushBtn.clicked.connect(self.choose_color)
+        self.stackedWidget.ui.choosePlayerColorPushBtn.clicked.connect(self.chooseColor)
+        self.stackedWidget.ui.choosePlayerTrackColorPushBtn.clicked.connect(self.chooseColor)
 
     def loadContent(self):
         self.stackedWidget.ui.playerColorComboBox.addItems(Colors())
@@ -73,10 +78,14 @@ class MainWindow(QMainWindow):
 
     def training(self):
         """ trainingPushBtn click event """
+        self.buildGame()
+        self.gameFrameInit()
+        self.animation(self.stackedWidget.ui.trainingPushBtn)
         self.stackedWidget.setCurrentIndex(1)
 
     def settings(self):
         """ settingsPushBtn click event """
+        self.animation(self.stackedWidget.ui.settingsPushBtn)
         self.stackedWidget.setCurrentIndex(2)
 
     def exit(self):
@@ -85,10 +94,14 @@ class MainWindow(QMainWindow):
         self.dialog = Dialog("Exit", "Are you sure about exit?", QCoreApplication.quit)
 
     @pyqtSlot()
-    def choose_color(self):
+    def chooseColor(self):
         return QColorDialog.getColor()
 
-    def get_player(self):
+    def buildGame(self):
+        BaseGame.player = self.buildPlayer()
+        GameFrame.game = Tron()  # TODO remove default from here, swap by abstract game
+
+    def buildPlayer(self) -> Player:
         _x = self.frameGeometry().width()
         _y = self.frameGeometry().height()
         player_position = [_x / 2, _y / 2]
@@ -103,13 +116,3 @@ class MainWindow(QMainWindow):
                       color=player_color,
                       track_color=track_color,
                       name=player_name)
-
-    def timerEvent(self, event):
-        self.update()
-
-    def keyPressEvent(self, event):
-        key = event.key()
-        if key == Qt.Key_Escape:
-            if not self.stackedWidget.currentIndex():
-                self.exit()
-            self.stackedWidget.setCurrentIndex(0)

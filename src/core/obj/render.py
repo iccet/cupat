@@ -7,6 +7,8 @@ from PyQt5.QtCore import Qt, QPoint
 from abc import ABC, abstractmethod
 from samples.colors import Colors
 
+FPS = 60
+
 
 class RenderObject(ABC):
     OBJECT_CENTER_MASS_COLOR = Colors.WHITE

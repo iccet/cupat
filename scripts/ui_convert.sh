@@ -18,11 +18,11 @@ then
   mkdir $destination_path
 fi
 
-for file in ${source_path%[/.]*}/*.ui
+for file in ${source_path%.*}/*.ui
   do
     name="${file##*/}";
-    echo $source_path
-    pyuic5 -x $file -o $destination_path/ui_${name%[/.]*}.py;
+    echo $file
+    pyuic5 -x $file -o $destination_path/ui_${name%.*}.py;
 done
 
 exit 0

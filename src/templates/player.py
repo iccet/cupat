@@ -8,19 +8,19 @@ from src.core.obj.base import CCC
 from exceptions.player import PlayerAlreadyExist
 
 BASIC_SHAPES = {
+    "cursor": ([0, 0],
+               [math.cos(math.pi / 3) / CCC / 2, 1 / CCC / 2],
+               [math.cos(math.pi / 2) / CCC / 2 + 1 / CCC / 4, 1 / CCC],
+               [math.cos(math.pi / 6) / CCC / 2, 1 / CCC / 2],
+               [1 / CCC / 2, math.cos(math.pi / 6) / CCC / 2],
+               [1 / CCC, math.cos(math.pi / 2) / CCC + 1 / CCC / 4],
+               [1 / CCC / 2, math.cos(math.pi / 3) / CCC / 2]),
     "triangle": ([0, 0],
                  [math.cos(math.pi / 2) / CCC / 2, 1 / CCC / 2],
                  [1 / CCC / 2, math.cos(math.pi / 2) / CCC / 2]),
     "rocket": ([0, 0],
                [math.cos(math.pi / 3) / CCC / 2, 1 / CCC / 2],
                [math.cos(math.pi / 2) / CCC / 2 + 1 / CCC / 4, 1 / CCC],
-               [1 / CCC, math.cos(math.pi / 2) / CCC + 1 / CCC / 4],
-               [1 / CCC / 2, math.cos(math.pi / 3) / CCC / 2]),
-    "cursor": ([0, 0],
-               [math.cos(math.pi / 3) / CCC / 2, 1 / CCC / 2],
-               [math.cos(math.pi / 2) / CCC / 2 + 1 / CCC / 4, 1 / CCC],
-               [math.cos(math.pi / 6) / CCC / 2, 1 / CCC / 2],
-               [1 / CCC / 2, math.cos(math.pi / 6) / CCC / 2],
                [1 / CCC, math.cos(math.pi / 2) / CCC + 1 / CCC / 4],
                [1 / CCC / 2, math.cos(math.pi / 3) / CCC / 2]),
     "arrow": ([0, 0],
@@ -44,6 +44,18 @@ class BasePlayer(Actor):
         super().__init__(name, color, position, shape, shape)
         self.track_color = track_color
 
+    def render(self):
+        super().render()
+        self.draw_track()
+
+    @Collision.Elastic
+    def in_collision(self, *objects):
+        pass
+
+    def update(self):
+        super().update()
+        self.update_track()
+
     def update_track(self):
         if len(self.track) > self._track_length:
             self.track.pop(0)
@@ -57,18 +69,6 @@ class BasePlayer(Actor):
 
         for i in range(1, len(self.track)):
             self.painter.drawLine(*self.track[i - 1], *self.track[i])
-
-    def render(self):
-        super().render()
-        self.draw_track()
-
-    @Collision.Elastic
-    def in_collision(self, *objects):
-        pass
-
-    def update(self):
-        super().update()
-        self.update_track()
 
 
 class Player(BasePlayer):

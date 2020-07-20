@@ -12,9 +12,13 @@ class Colors:
     LIGHT_BLUE = "#2494ea"
 
     GRAY = "#31363b"
-    BLACK = "#23262a"
+    # BLACK = "#23262a"
     WHITE = "#eff0f1"
 
     def __iter__(self):
         for attr in [attr for attr in dir(self) if not attr.startswith("__")]:
             yield getattr(self, attr)
+
+    def __reversed__(self):
+        for attr in list(self)[-1::]:
+            yield attr
