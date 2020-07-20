@@ -60,7 +60,7 @@ class Collision:
             tvec = sorted((abs(_ocm - _tc[i]), i) for i in range(_ltc))[:2]
             ovec = sorted((abs(_tcm - _oc[i]), i) for i in range(_loc))[:2]
             _a = Vector.angle_between_vectors(_tc[tvec[1][1]] - _tc[tvec[0][1]], _oc[ovec[1][1]] - _oc[ovec[0][1]])
-            this.speed.force = this.speed.force.rotate(_a)
+            this.speed.value = this.speed.value.rotate(_a)
 
     class NonElastic(collisionhandler):
         @staticmethod

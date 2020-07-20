@@ -11,10 +11,10 @@ class DynamicObject(PhysicObject):
 
     def _update_collision(self):
         _pos = self.position
-        _f = self.move_vector
+        _f = self.move_target
 
-        self.collision = [Vector(point) + self.speed.force for point in self.collision]
-        self.geometry = [Vector(point) + self.speed.force for point in self.geometry]
+        self.collision = [Vector(point) + self.speed.value for point in self.collision]
+        self.geometry = [Vector(point) + self.speed.value for point in self.geometry]
 
     def update(self):
         self._update_collision()

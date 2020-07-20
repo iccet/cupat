@@ -241,6 +241,11 @@ class Vector:
         return self
 
     @classmethod
+    def component(cls, array: Iterable, index):
+        for i in array:
+            yield i[index]
+
+    @classmethod
     def make_vector(cls, v_begin: Vector[T], v_end=None) -> Vector[T]:
         """ Create Vector[T] from points:
         v_begin - begin point, or Vector[T] out zero coordinates

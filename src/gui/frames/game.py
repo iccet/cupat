@@ -38,10 +38,10 @@ class GameFrame(QFrame):
         self.update()
 
     def mouseReleaseEvent(self, QMouseEvent):
-        self.game.player.move_vector = (QMouseEvent.x(), QMouseEvent.y())
+        self.game.player.move_target = (QMouseEvent.x(), QMouseEvent.y())
 
     def mouseMoveEvent(self, QMouseEvent):
-        self.game.player.move_vector = (QMouseEvent.x(), QMouseEvent.y())
+        self.game.player.move_target = (QMouseEvent.x(), QMouseEvent.y())
 
     def paintEvent(self, event):
         self.painter.begin(self)
@@ -53,5 +53,5 @@ class GameFrame(QFrame):
         self.game.player.ready = True
 
     def update(self):
-        self.ui.forceLcdNumber.display(abs(self.game._random_force.force))
-        self.ui.speedLcdNumber.display(abs(self.game.player.speed.force))
+        self.ui.forceLcdNumber.display(abs(self.game._random_force.value))
+        self.ui.speedLcdNumber.display(abs(self.game.player.speed.value))

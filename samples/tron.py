@@ -1,5 +1,6 @@
 from src.base_game import *
 from src.templates.random_force import RandomForce
+from src.core.obj.force import ParasiteForceRender
 from src.templates.wall import Wall
 
 
@@ -11,6 +12,7 @@ class Tron(SinglePlayerGame):
     def __init__(self):
         super().__init__()
         self.scene_init()
+        self._random_force_render = ParasiteForceRender(self._random_force)
 
     def scene_init(self):
         self._random_force = RandomForce(self.player)
@@ -58,4 +60,4 @@ class Tron(SinglePlayerGame):
             for obj in self.__scene_objects:
                 obj.render()
 
-            self._random_force.render()
+            self._random_force_render.render()
