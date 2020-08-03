@@ -199,8 +199,10 @@ class Vector:
         """ Overloaded multiplication """
         if isinstance(other, int) or isinstance(other, float):
             return Vector(map(lambda x: x * other, self))
-        else:
+        elif isinstance(other, type(self)):
             return Vector(map(self._mul, self, other))
+        else:
+            raise TypeError
 
     def __imul__(self, other) -> Vector[T]:
         self = self * other
@@ -210,8 +212,10 @@ class Vector:
         """ Overloaded division """
         if isinstance(other, int) or isinstance(other, float):
             return Vector(*map(lambda x: x / other, self))
-        else:
+        elif isinstance(other, type(self)):
             return Vector(*map(self._div, self, other))
+        else:
+            raise TypeError
 
     def __itruediv__(self, other) -> Vector[T]:
         self = self / other
@@ -242,6 +246,7 @@ class Vector:
 
     @classmethod
     def component(cls, array: Iterable, index):
+        """ Getting components at index of iterable """
         for i in array:
             yield i[index]
 
@@ -277,23 +282,23 @@ class Vector:
     def get_angle(self, other) -> float:
         return self.angle_between_vectors(self, other)
 
-    def rotate(self, a: float, _v: Vector[T] = None) -> Vector[T]:
+    def rotate(self, angle: float, vector: Vector[T] = None) -> Vector[T]:
         """ 2d rotate
-        a: angle (rad),
-        p: rotation point
+        angle: rad,
+        vector: rotation point
         
         Maybe override for more dimensional vector rotate
         """
-        if _v is None:
-            _v = Vector(0, 0)
+        if vector is None:
+            vector = Vector(0, 0)
         _len = len(self)
         if _len > 1:
-            c = math.cos(a)
-            s = math.sin(a)
-            self -= _v
+            c = math.cos(angle)
+            s = math.sin(angle)
+            self -= vector
             self @= [[c, -s],
                      [s, c]]
-            self += _v
+            self += vector
         else:
-            raise Exception(f"Cant rotate {_len}-dimensional Vector[T].")
+            raise Exception(f"Can not rotate {_len}-dimensional Vector[T].")
         return self
