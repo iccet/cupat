@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog
-from src.gui.ui_generated.ui_dialogwindow import Ui_Dialog
+from ui_dialogwindow import Ui_Dialog
 from PyQt5.QtCore import QCoreApplication
 
 

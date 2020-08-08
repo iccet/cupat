@@ -18,10 +18,12 @@ then
   mkdir $destination_path
 fi
 
+echo -e "Convert from \033[0;36m$source_path\033[0m to \033[0;32m$destination_path\033[0m"
+
 for file in ${source_path%.*}/*.ui
   do
     name="${file##*/}";
-    echo $file
+    echo -e "${file%/*}/\033[0;33m$name\033[0m"
     pyuic5 -x $file -o $destination_path/ui_${name%.*}.py;
 done
 
