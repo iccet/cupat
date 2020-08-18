@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QMainWindow, QColorDialog
 from PyQt5.QtCore import QBasicTimer, Qt, QCoreApplication, pyqtSlot, QPropertyAnimation, QRect
-from ui_mainwindow import Ui_MainWindow
+from gui.ui_generated.ui_mainwindow import Ui_MainWindow
 from ..widgets.stacked import StackedWidget
 from .dialog import Dialog
-from frames.game import GameFrame
+from gui.frames.game import GameFrame
 from src.templates.player import Player, BASIC_SHAPES
 from src.base_game import BaseGame
 from samples.tron import Tron
