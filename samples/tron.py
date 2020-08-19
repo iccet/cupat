@@ -18,16 +18,16 @@ class Tron(SinglePlayerGame):
         self._random_force = RandomForce(self.player)
         self._random_force.random()
 
-        wall = Wall(name="Wall", position=[100, 100], scaling=(50, 500))
+        wall = Wall(position=[100, 100], scaling=(50, 500))
         self.__scene_objects.append(wall)
-        wall = Wall(name="Wall", position=[900, 200], scaling=(100, 100))
+        wall = Wall(position=[900, 200], scaling=(100, 100))
         self.__scene_objects.append(wall)
-        wall = Wall(name="Wall", position=[1600, 200], scaling=(10, 500))
+        wall = Wall(position=[1600, 200], scaling=(10, 500))
         self.__scene_objects.append(wall)
 
-        wall = Wall(name="Wall", position=[500, 500], scaling=(100, 100))
+        wall = Wall(position=[500, 500], scaling=(100, 100))
         self.__scene_objects.append(wall)
-        wall = Wall(name="Wall", position=[500, 900], scaling=(500, 100))
+        wall = Wall(position=[500, 900], scaling=(500, 100))
         self.__scene_objects.append(wall)
 
     def random_event(self):

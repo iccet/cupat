@@ -55,7 +55,7 @@ class BaseObject(ABC):
     @name.setter
     def name(self, name: str):
         if name is None:
-            self.__name = self._name_gen()
+            self.__name = self._name_gen(self.__class__.__name__)
         elif name in self.objects:
             self.__name = self._name_gen(name)
         else:
