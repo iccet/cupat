@@ -5,9 +5,18 @@ import subprocess
 import os
 
 
+def check_platform():
+    if sys.platform.startswith("linux"):
+        return "scripts/ui_convert.sh"
+    elif sys.platform.startswith("win32"):
+        return "scripts/ui_converter.bat"
+    return "scripts/ui_convert.sh"
+
+
 def ui_convert():
     path = os.getcwd()
-    args = ["scripts/ui_convert.sh", "static/ui", "gui/ui_generated"]
+    converter = check_platform()
+    args = [converter, "static/ui", "gui/ui_generated"]
     subprocess.call([os.path.join(path, arg) for arg in args])
 
 
