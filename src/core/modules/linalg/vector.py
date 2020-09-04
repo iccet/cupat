@@ -1,6 +1,7 @@
 from typing import List, TypeVar, Iterator, Iterable
 from cached_property import cached_property
 import math
+import operator
 
 T = TypeVar('T', int, float, complex)
 Vector = Iterable[List[T]]
@@ -8,7 +9,7 @@ Vector = Iterable[List[T]]
 
 # noinspection PyTypeChecker
 class Vector:
-    """ Vector methods implementation
+    """ Vector implementation
     translation :
         Vector[T](self) on Vector[T](other)
          __add__(), __iadd__() : with '+' sign
@@ -22,29 +23,6 @@ class Vector:
     _sup_arr: List[T] = None  # support array for calc angle between vectors in range(-pi, +pi)
 
     @staticmethod
-    def _sum(x, y):
-        return x + y
-
-    @staticmethod
-    def _sub(x, y):
-        return x - y
-
-    @staticmethod
-    def _mul(x, y):
-        return x * y
-
-    @staticmethod
-    def _pow(x, y):
-        return x ** y
-
-    @staticmethod
-    def _div(x, y):
-        return x / y
-
-    def __sup_vector_angle(self):
-        return math.atan2(*self)
-
-    @staticmethod
     def angle_between_vectors(v1, v2=None, default_range: bool = True) -> float:
         """ Return angle between vector in
         default_range: [0, 180]
@@ -54,7 +32,7 @@ class Vector:
         if v2 is None:
             v2 = Vector._sup_arr
         if default_range:
-            return -(v1.__sup_vector_angle() - v2.__sup_vector_angle())
+            return -(math.atan2(*v1) - math.atan2(*v2))
         else:
             try:
                 return math.acos(sum(v1 * v2) / (abs(v1) * abs(v2)))
@@ -172,20 +150,20 @@ class Vector:
         return False
 
     def __abs__(self) -> float:
-        return math.sqrt(sum(map(self._mul, self, self)))
+        return math.sqrt(sum(map(operator.mul, self, self)))
 
     def __add__(self, other: Vector[T]) -> Vector[T]:
-        return Vector(*map(self._sum, self, other))
+        return Vector(*map(operator.add, self, other))
 
     def __iadd__(self, other: Vector[T]) -> Vector[T]:
-        self._carr = list(map(self._sum, self, other))
+        self._carr = list(map(operator.add, self, other))
         return self
 
     def __sub__(self, other: Vector[T]) -> Vector[T]:
-        return Vector(*map(self._sub, self, other))
+        return Vector(*map(operator.sub, self, other))
 
     def __isub__(self, other: Vector[T]) -> Vector[T]:
-        self._carr = list(map(self._sub, self, other))
+        self._carr = list(map(operator.sub, self, other))
         return self
 
     def __pow__(self, power, modulo=None):
@@ -200,7 +178,7 @@ class Vector:
         if isinstance(other, int) or isinstance(other, float):
             return Vector(map(lambda x: x * other, self))
         elif isinstance(other, type(self)):
-            return Vector(map(self._mul, self, other))
+            return Vector(map(operator.mul, self, other))
         else:
             raise TypeError
 
@@ -213,7 +191,7 @@ class Vector:
         if isinstance(other, int) or isinstance(other, float):
             return Vector(*map(lambda x: x / other, self))
         elif isinstance(other, type(self)):
-            return Vector(*map(self._div, self, other))
+            return Vector(*map(operator.truediv, self, other))
         else:
             raise TypeError
 
@@ -258,7 +236,7 @@ class Vector:
         """
         if v_end is None:
             v_end = Vector([0, 0])
-        return cls(*map(Vector._sub, v_end, v_begin))
+        return cls(*map(operator.sub, v_end, v_begin))
 
     def normalized(self, k: float = 1) -> Vector[T]:
         """ Return new normalized of instance self Vector[T]"""

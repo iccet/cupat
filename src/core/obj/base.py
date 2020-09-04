@@ -1,4 +1,4 @@
-from linalg.vector import Vector
+from src.core.modules.linalg.vector import Vector
 from abc import ABC, abstractmethod
 
 """ CCC - Global coefficient for adequate scaling speed px,

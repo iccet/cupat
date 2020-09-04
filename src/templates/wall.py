@@ -1,6 +1,6 @@
 from ..core.obj.static import StaticObject
 from ..core.obj.render import RenderObject
-from linalg.collision import Collision
+from src.core.modules.linalg.collision import Collision
 from samples.colors import Colors
 
 WALL_STD_COLOR = WSC = Colors.LIGHT_BLUE

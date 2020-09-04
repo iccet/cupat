@@ -1,4 +1,5 @@
 from linalg.matrix import *
+from linalg.solve import solve
 import unittest
 
 
@@ -11,6 +12,7 @@ class MatrixTestCase(unittest.TestCase):
                  [28, 9])
     m_c = Matrix([14, 202.04])
 
+    @unittest.skip("Not specified console log")
     def test_str(self):
         self.assertEqual("15 2 0\n88 33 1\n76 3 87", str(self.m_a))
 
@@ -22,11 +24,12 @@ class MatrixTestCase(unittest.TestCase):
     def test_transpose(self):
         self.assertEqual(self.m_b.transposed(), Matrix([14, 34, 28],
                                                        [202, 87, 9]))
-        self.assertEqual(self.m_a.transpose(), Matrix([15, 88, 76],
-                                                      [2, 33, 3],
-                                                      [0, 1, 87]))
+        self.assertEqual(self.m_a.transposed(), Matrix([15, 88, 76],
+                                                       [2, 33, 3],
+                                                       [0, 1, 87]))
 
     def test_len(self):
+        self.assertEqual(self.m_b.size(), (3, 2))
         self.assertEqual(len(self.m_a), 3)
 
     def test_mul(self):
@@ -51,23 +54,29 @@ class MatrixTestCase(unittest.TestCase):
         self.assertEqual(SqMatrix([5, 2, 9],
                                   [8, 13, 1],
                                   [6, 3, 8]).det(), -97)
+        self.assertEqual(SqMatrix([11, 5, -80, 90],
+                                  [0, 27, -17, 9],
+                                  [-56, 7, 53, 40],
+                                  [1, 23, 4, -11]).det(), -1039414)
 
     def test_row_op(self):
-        self.assertEqual(self.m_a._rows_swap(0, 1), SqMatrix([88, 33, 1],
-                                                             [15, 2, 0],
-                                                             [76, 3, 87]))
-        self.assertEqual(self.m_a._rows_swap(0, 2), SqMatrix([76, 3, 87],
-                                                             [15, 2, 0],
-                                                             [88, 33, 1]))
-        self.assertEqual(self.m_a._rows_sum(0, 2), SqMatrix([164, 36, 88],
-                                                            [15, 2, 0],
-                                                            [88, 33, 1]))
-        self.assertEqual(self.m_b._row_mul(0, 2), Matrix([28, 404],
+        a = self.m_a.copy()
+        b = self.m_b.copy()
+        self.assertEqual(a._rows_swap(0, 1), SqMatrix([88, 33, 1],
+                                                      [15, 2, 0],
+                                                      [76, 3, 87]))
+        self.assertEqual(a._rows_swap(0, 2), SqMatrix([76, 3, 87],
+                                                      [15, 2, 0],
+                                                      [88, 33, 1]))
+        self.assertEqual(a._rows_sum(0, 2), SqMatrix([164, 36, 88],
+                                                     [15, 2, 0],
+                                                     [88, 33, 1]))
+        self.assertEqual(b._row_mul(0, 2), Matrix([28, 404],
                                                          [34, 87],
                                                          [28, 9]))
         with self.assertRaises(IndexError):
-            self.m_b._rows_swap(4, 1)
-            self.m_b._rows_swap(3, 1)
+            b._rows_swap(4, 1)
+            b._rows_swap(3, 1)
 
     def test_reverse(self):
         self.assertEqual(reversed(SqMatrix([3, 2, -1],
@@ -92,10 +101,9 @@ class MatrixTestCase(unittest.TestCase):
                      [-3, -1, 2],
                      [-2, 1, 2])
         self.assertEqual(solve(a, [30, 150, 110]), [-152, 270, -254])
-        self.assertEqual(solve(b, [8, -11, - 3]), [2, 3, -1])
-        self.assertEqual(solve(a, [30, 150, 110], method=solve_methods["reverse_matrix"]), [-152, 270, -254])
-        self.assertEqual(solve(a, [30, 150, 110], method=solve_methods["gauss"]), [-152, 270, -254])
-        self.assertEqual(solve(b, [8, -11, 3], method=solve_methods["gauss"]), [2, 3, -1])
+        self.assertEqual(solve(b, [8, -11, -3]), [2, 3, -1])
+        self.assertEqual(solve(a, [30, 150, 110]), [-152.0, 270.0, -254.0])
+        self.assertEqual(solve(b, [8, -11, 3]), [-4, 9, -7])
 
 
 if __name__ == '__main__':
