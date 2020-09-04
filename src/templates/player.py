@@ -3,9 +3,9 @@ import math
 from ..core.obj.render import *
 from ..core.obj.actor import Actor
 
-from linalg.collision import Collision
+from src.core.modules.linalg.collision import Collision
 from src.core.obj.base import CCC
-from exceptions.player import PlayerAlreadyExist
+from src.core.exceptions.player import PlayerAlreadyExist
 
 BASIC_SHAPES = {
     "cursor": ([0, 0],
