@@ -3,7 +3,7 @@ import math
 from ..core.obj.render import *
 from ..core.obj.actor import Actor
 
-from src.core.modules.linalg.collision import Collision
+from src.modules.collision.handler import ElasticHandler
 from src.core.obj.base import CCC
 from src.core.exceptions.player import PlayerAlreadyExist
 
@@ -48,7 +48,7 @@ class BasePlayer(Actor):
         super().render()
         self.draw_track()
 
-    @Collision.Elastic
+    @ElasticHandler
     def in_collision(self, *objects):
         pass
 

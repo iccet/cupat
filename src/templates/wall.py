@@ -1,6 +1,6 @@
 from ..core.obj.static import StaticObject
 from ..core.obj.render import RenderObject
-from src.core.modules.linalg.collision import Collision
+from src.modules.collision.handler import NonElasticHandler
 from samples.colors import Colors
 
 WALL_STD_COLOR = WSC = Colors.LIGHT_BLUE
@@ -19,7 +19,7 @@ class Wall(StaticObject, RenderObject):
         StaticObject.__init__(self, name, position, _cs)
         RenderObject.__init__(self, color, _cs)
 
-    @Collision.NonElastic
+    @NonElasticHandler
     def in_collision(self, *objects):
         pass
 

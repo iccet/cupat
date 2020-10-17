@@ -25,14 +25,12 @@ class AbstractHandler(ABC):
         _tc = this.collision_box[:2]
         _os = other.collision_box[2:]
         _oc = other.collision_box[:2]
-        obj = other.collision_box
-        coll = this.collision_box
 
         tx0, ty0 = _tc
         ox0, oy0, = _oc
-        a, b = Vector(_ts) + Vector(_tc)
-        c, d = Vector(_os) + Vector(_oc)
-        tx, ty, ox, oy = [sum(i) for i in zip(this.collision_box, other.collision_box)]
+        tx, ty = Vector(_ts) + Vector(_tc)
+        ox, oy = Vector(_os) + Vector(_oc)
+        # tx, ty, ox, oy = [sum(i) for i in zip(this.collision_box, other.collision_box)]
 
         if tx < ox0 or tx0 > ox or oy < ty0 or oy0 > ty:
             return False
