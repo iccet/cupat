@@ -1,4 +1,4 @@
-from linalg.vector import Vector
+from vector import Vector
 import unittest
 
 

@@ -1,4 +1,4 @@
-from linalg.matrix import *
+from linalg.matrix import SqMatrix, Matrix
 from linalg.solve import solve
 import unittest
 
