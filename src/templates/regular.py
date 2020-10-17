@@ -3,16 +3,14 @@ from PyQt5.QtGui import QPen, QPainter, QPolygon
 from PyQt5.QtCore import Qt, QPoint
 from src.core.objects.render import RenderObject
 from src.core.objects.physic import PhysicObject
+from src.core.objects.attachable import AttachableObject
 from samples.colors import Colors
 from utils import regular, circumscribed_radius
 
 DEFAULT_COLOR = DC = Colors.WHITE
 
 
-class Primitive(RenderObject, PhysicObject, ABC):
-
-    def update(self):
-        self.position = self.root.position
+class Primitive(RenderObject, PhysicObject, AttachableObject, ABC): pass
 
 
 class Circle(Primitive):
@@ -25,7 +23,7 @@ class Circle(Primitive):
         pass
 
     def __init__(self, root: PhysicObject, color: str = DC):
-        PhysicObject.__init__(self, root=root, position=root.position)
+        PhysicObject.__init__(self, position=root.position)
         RenderObject.__init__(self, color, self.collision)
         self.radius = circumscribed_radius(root)
 
@@ -68,6 +66,7 @@ class Box(Primitive):
     def __init__(self, root: PhysicObject, n: int, color: str = DC):
         self.subdivide = n
         self.collision = self.describe(root, self.subdivide)
+        AttachableObject.__init__(self, root)
         PhysicObject.__init__(self, collision_shape=self.collision, position=root.position)
         RenderObject.__init__(self, color, self.collision)
 

@@ -47,10 +47,10 @@ class Tron(SinglePlayerGame):
 
             self._random_force.update()
 
-            # for objects in self.__scene_objects:
+            for objects in self.__scene_objects:
+                objects.update()
             #     self._random_force.in_collision(objects)
             #     objects.in_collision(objects, *self.__scene_objects, *self._players)
-            #     objects.update()
 
             for player in self._players:
                 # self._random_force.in_collision(player)

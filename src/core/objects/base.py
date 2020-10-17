@@ -14,11 +14,10 @@ class BaseObject(ABC):
     count = 0
     objects = set()  # TODO create set of BaseObjects
 
-    def __init__(self, name: str = None, position: Vector = None, root=None):
-        self.root = root
+    def __init__(self, name: str = None, position: Vector = None):
+        self.name = name
         if position is not None:
             self.__position = Vector(position)
-            self.name = name
 
     def __del__(self):
         self.count -= 1
@@ -54,7 +53,7 @@ class BaseObject(ABC):
 
     @name.setter
     def name(self, name: str):
-        if name is None:
+        if name is None or name in (o.name for o in self.objects):
             self.__name = self._name_gen(self.__class__.__name__)
         elif name in self.objects:
             self.__name = self._name_gen(name)
