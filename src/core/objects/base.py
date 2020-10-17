@@ -1,6 +1,3 @@
-from src.modules.linalg.vector import Vector
-from abc import ABC, abstractmethod
-
 """ CCC - Global coefficient for adequate scaling speed px,
     else we have abs(vector) >= 1000, what cant be controlable,
     changing this parameter has unobvious consequences, careful.
@@ -8,44 +5,19 @@ from abc import ABC, abstractmethod
 CONST_CONVERT_COEFFICIENT = CCC = 1 / 100
 
 
-class BaseObject(ABC):
+class BaseObject:
     """ Basic game objects """
 
     count = 0
-    objects = set()  # TODO create set of BaseObjects
+    objects = set()
 
-    def __init__(self, name: str = None, position: Vector = None):
+    def __init__(self, name: str = None):
         self.name = name
-        if position is not None:
-            self.__position = Vector(position)
+        self.objects.add(self)
 
     def __del__(self):
+        self.objects.remove(self)
         self.count -= 1
-
-    @abstractmethod
-    def in_collision(self, other):
-        """ Impact OF external objects """
-        pass
-
-    @abstractmethod
-    def on_external_impact(self, other):
-        """ Impact ON external objects """
-        pass
-
-    @abstractmethod
-    def update(self):
-        pass
-
-    @property
-    def position(self):
-        return self.__position
-
-    @position.setter
-    def position(self, _v: Vector):
-        if isinstance(_v, Vector):
-            self.__position = _v
-        else:
-            raise TypeError
 
     @property
     def name(self):
@@ -55,12 +27,9 @@ class BaseObject(ABC):
     def name(self, name: str):
         if name is None or name in (o.name for o in self.objects):
             self.__name = self._name_gen(self.__class__.__name__)
-        elif name in self.objects:
-            self.__name = self._name_gen(name)
         else:
             self.count += 1
             self.__name = name
-            self.objects.add(name)
 
     @classmethod
     def _name_gen(cls, pattern="GameObject"):

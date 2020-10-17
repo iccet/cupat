@@ -1,4 +1,5 @@
 from .base import *
+from .root import RootObject
 from .render import *
 from samples.colors import Colors
 import math
@@ -8,7 +9,7 @@ FORCE_PARASITE_VECTOR_COLOR = FPVC = Colors.RED
 FORCE_RANDOM_VECTOR_COLOR = FRVC = Colors.MAGENTA
 
 
-class Force(BaseObject):
+class Force(RootObject, BaseObject):
     """ Non placeable, rootable gameobj
 
     _target_force_vector:
@@ -24,7 +25,8 @@ class Force(BaseObject):
     __acceleration = None
 
     def __init__(self, root: BaseObject, target: Vector):
-        BaseObject.__init__(self, None, root.center_mass)
+        BaseObject.__init__(self)
+        RootObject.__init__(self, root.center_mass)
         self._target = target
         self._value = Vector(0, 0)
         self.root = root

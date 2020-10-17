@@ -1,9 +1,14 @@
 from .base import *
+from src.modules.linalg.vector import Vector
+from .root import RootObject
 from .force import Force, ParasiteForce
+from interfaces.idynamic import IDynamic
+from interfaces.iincollision import IInCollision
+from interfaces.iimpact import IImpact
 import math
 
 
-class PhysicObject(BaseObject):
+class PhysicObject(RootObject, BaseObject, IDynamic, IInCollision, IImpact):
     __mass = None
     speed: Force = None
     acceleration: Force = None
@@ -24,7 +29,8 @@ class PhysicObject(BaseObject):
             return Vector(self.speed.value * self.__mass)
 
     def __init__(self, name: str = None, position=None, collision_shape: list = None, mass=.5):
-        super().__init__(name, position)
+        BaseObject.__init__(self, name)
+        RootObject.__init__(self, position)
         self.__collision_shape = [(Vector(point) + self.position) for point in collision_shape]
         self.mass_vector = self._calc_center_mass()
         self.__mass = mass
@@ -109,9 +115,9 @@ class PhysicObject(BaseObject):
     def in_collision(self, other):
         pass
 
-    def on_external_impact(self, other):
+    def impact_on(self, other):
         if self._external_mutable:
-            self.speed.value += other * CCC
+            self.speed.value += other.value * CCC / 2
 
     def update(self):
         self._control_impact()

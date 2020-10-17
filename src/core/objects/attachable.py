@@ -1,13 +1,13 @@
-from abc import ABC
-from base import BaseObject
+from root import RootObject
+from interfaces.idynamic import IDynamic
 
 
-class AttachableObject(BaseObject, ABC):
-    root: BaseObject = None
+class AttachableObject(RootObject, IDynamic):
+    root: RootObject = None
 
     def __init__(self, root=None, *args, **kwargs):
         self.root = root
-        BaseObject.__init__(self, *args, **kwargs)
+        RootObject.__init__(self, root.position)
 
     def update(self):
         self.position = self.root.position

@@ -2,15 +2,15 @@
 
 from PyQt5.QtGui import QColor, QPen, QBrush, \
     QPainter, QPolygon, QFont
-from .base import Vector
+from src.modules.linalg.vector import Vector
 from PyQt5.QtCore import Qt, QPoint
-from abc import ABC, abstractmethod
 from samples.colors import Colors
+from interfaces.irender import IRender
 
 FPS = 60
 
 
-class RenderObject(ABC):
+class RenderObject(IRender):
     OBJECT_CENTER_MASS_COLOR = Colors.WHITE
     OBJECT_COLLISION_BOX_COLOR = Colors.WHITE
     OBJECT_COLLISION_COLOR = Colors.WHITE

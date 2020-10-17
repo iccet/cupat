@@ -1,9 +1,11 @@
-from ..core.objects.force import Force, FRVC, Vector
+from ..core.objects.force import Force, FRVC
 from ..core.objects.render import *
+from interfaces.iimpact import IImpact
 import random
 
 
-class RandomForce(Force):
+class RandomForce(IImpact, Force):
+
     __range = None
     __acceleration = None
 
@@ -12,6 +14,12 @@ class RandomForce(Force):
         self.color = FRVC
         self.__range = _range
         self.__acceleration = acceleration
+
+    def in_collision(self, other):
+        other.impact_on(self)
+
+    def impact_on(self, other):
+        pass
 
     def random(self):
         random.seed()

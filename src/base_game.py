@@ -1,28 +1,22 @@
-from abc import abstractmethod, ABC
-
 from .core.net.client import Client
+from interfaces.igame import IGame
 
 
-class BaseGame(ABC):
+class BaseGame(IGame):
     scene = None
     player = None
 
     def __init__(self):
         self._players.append(self.player)
 
-    @abstractmethod
     def scene_init(self): pass
 
-    @abstractmethod
     def random_event(self): pass
 
-    @abstractmethod
     def add_player(self, player): pass
 
-    @abstractmethod
     def update(self): pass
 
-    @abstractmethod
     def render(self): pass
 
 
