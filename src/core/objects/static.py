@@ -1,23 +1,10 @@
 from .physic import PhysicObject, Vector
+from interfaces.idynamic import IDynamic
 
 
 class StaticObject(PhysicObject):
 
-    def in_collision(self, other):
-        pass
-
-    def on_external_impact(self, *others):
-        for other in others:
-            super().in_collision(other)
-
-    def _update_collision(self):
-        _pos = self.position
-        _f = self.move_target
-
+    def update(self):
         self.collision = [Vector(point) + self.speed.value for point in self.collision]
         self.geometry = [Vector(point) + self.speed.value for point in self.geometry]
-
-    def update(self):
-        self._update_collision()
-        self._update_collision_box()
 

@@ -1,8 +1,12 @@
 from PyQt5.QtWidgets import QApplication
 from gui.windows.main import MainWindow
+from src.core.objects.base import BaseObject
 import sys
 import subprocess
 import os
+import logging
+
+LOGGING_FORMAT = '%(levelname)s %(asctime)-15s Module %(module)s %(message)s'
 
 
 def check_platform():
@@ -21,6 +25,8 @@ def ui_convert():
 
 
 def main():
+    logging.basicConfig(format=LOGGING_FORMAT)
+    BaseObject.logger = logging.getLogger('core')
     os.chdir(os.path.dirname(__file__))
     ui_convert()
     app = QApplication([])

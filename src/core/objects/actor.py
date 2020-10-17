@@ -14,12 +14,6 @@ class Actor(PhysicObject, RenderObject):
         self.target_render = ForceRender(self.speed_target)
         self.acceleration_render = ParasiteForceRender(self.acceleration)
 
-    def on_external_impact(self, other):
-        PhysicObject.on_external_impact(self, other)
-
-    def in_collision(self, other):
-        PhysicObject.in_collision(self, other)
-
     def render(self):
         RenderObject.render(self)
         self.acceleration_render.render()

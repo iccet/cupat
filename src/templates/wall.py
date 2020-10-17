@@ -24,14 +24,7 @@ class Wall(StaticObject, RenderObject):
         pass
 
     def on_external_impact(self, other):
-        print("wall impact", other)
-        pass
-
-    def render(self):
-        RenderObject.render(self)
-
-    def update(self):
-        StaticObject.update(self)
+        self.logger.info('Wall impact')
 
 
 class FlatWall(Wall):

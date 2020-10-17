@@ -7,6 +7,7 @@ CONST_CONVERT_COEFFICIENT = CCC = 1 / 100
 
 class BaseObject:
     """ Basic game objects """
+    logger = None
 
     count = 0
     objects = set()
@@ -14,6 +15,7 @@ class BaseObject:
     def __init__(self, name: str = None):
         self.name = name
         self.objects.add(self)
+        self.logger.info('Create object: %s', self)
 
     def __del__(self):
         self.objects.remove(self)

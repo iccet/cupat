@@ -8,6 +8,7 @@ class RootObject:
         if position is not None:
             self.__position = Vector(position)
         else:
+            self.logger.exception('Object %s is not constructible', self)
             raise ValueError
 
     @property
