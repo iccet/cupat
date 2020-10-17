@@ -4,3 +4,5 @@ build*/
 *cache*
 .idea
 venv
+
+gui/ui_generated
