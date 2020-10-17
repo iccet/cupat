@@ -2,6 +2,7 @@ from src.base_game import *
 from src.templates.random_force import RandomForce
 from src.core.obj.force import ParasiteForceRender
 from src.templates.wall import Wall
+from src.templates.regular import Circle, Box
 
 
 class Tron(SinglePlayerGame):
@@ -29,6 +30,11 @@ class Tron(SinglePlayerGame):
         self.__scene_objects.append(wall)
         wall = Wall(position=[500, 900], scaling=(500, 100))
         self.__scene_objects.append(wall)
+
+        circle = Box(self.player, 5)
+        self.__scene_objects.append(circle)
+        # box = Box(position=[500, 900], scaling=(500, 100))
+        # self.__scene_objects.append(box)
 
     def random_event(self):
         self._random_force.random()
