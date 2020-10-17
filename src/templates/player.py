@@ -1,10 +1,10 @@
 import math
 
-from ..core.obj.render import *
-from ..core.obj.actor import Actor
+from ..core.objects.render import *
+from ..core.objects.actor import Actor
 
 from src.modules.collision.handler import ElasticHandler
-from src.core.obj.base import CCC
+from src.core.objects.base import CCC
 from src.core.exceptions.player import PlayerAlreadyExist
 
 BASIC_SHAPES = {

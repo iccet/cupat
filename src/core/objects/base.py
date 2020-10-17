@@ -9,7 +9,7 @@ CONST_CONVERT_COEFFICIENT = CCC = 1 / 100
 
 
 class BaseObject(ABC):
-    """ Basic game obj """
+    """ Basic game objects """
 
     count = 0
     objects = set()  # TODO create set of BaseObjects

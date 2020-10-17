@@ -8,7 +8,7 @@ from src.templates.player import Player, BASIC_SHAPES
 from src.base_game import BaseGame
 from samples.tron import Tron
 from samples.colors import Colors
-from src.core.obj.render import FPS
+from src.core.objects.render import FPS
 
 
 class MainWindow(QMainWindow):

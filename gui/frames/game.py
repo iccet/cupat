@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import QTimer, QBasicTimer
 
 from gui.ui_generated.ui_gameframe import Ui_GameFrame
-from src.core.obj.render import RenderObject, FPS
+from src.core.objects.render import RenderObject, FPS
 
 RANDOM_EVENT_INTERVAL = REI = 5000
 

@@ -1,5 +1,5 @@
-from ..core.obj.force import Force, FRVC, Vector
-from ..core.obj.render import *
+from ..core.objects.force import Force, FRVC, Vector
+from ..core.objects.render import *
 import random
 
 

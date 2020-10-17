@@ -1,8 +1,8 @@
 from abc import ABC
 from PyQt5.QtGui import QPen, QPainter, QPolygon
 from PyQt5.QtCore import Qt, QPoint
-from src.core.obj.render import RenderObject
-from src.core.obj.physic import PhysicObject
+from src.core.objects.render import RenderObject
+from src.core.objects.physic import PhysicObject
 from samples.colors import Colors
 from utils import regular, circumscribed_radius
 

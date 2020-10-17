@@ -4,7 +4,7 @@ from .force import ForceRender, ParasiteForceRender
 
 
 class Actor(PhysicObject, RenderObject):
-    """ Physical scene obj,
+    """ Physical scene objects,
     placeable,
     moveable
     """

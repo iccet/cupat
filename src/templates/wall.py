@@ -1,5 +1,5 @@
-from ..core.obj.static import StaticObject
-from ..core.obj.render import RenderObject
+from ..core.objects.static import StaticObject
+from ..core.objects.render import RenderObject
 from src.modules.collision.handler import NonElasticHandler
 from samples.colors import Colors
 

@@ -1,6 +1,6 @@
 from src.base_game import *
 from src.templates.random_force import RandomForce
-from src.core.obj.force import ParasiteForceRender
+from src.core.objects.force import ParasiteForceRender
 from src.templates.wall import Wall
 from src.templates.regular import Circle, Box
 
@@ -47,10 +47,10 @@ class Tron(SinglePlayerGame):
 
             self._random_force.update()
 
-            # for obj in self.__scene_objects:
-            #     self._random_force.in_collision(obj)
-            #     obj.in_collision(obj, *self.__scene_objects, *self._players)
-            #     obj.update()
+            # for objects in self.__scene_objects:
+            #     self._random_force.in_collision(objects)
+            #     objects.in_collision(objects, *self.__scene_objects, *self._players)
+            #     objects.update()
 
             for player in self._players:
                 # self._random_force.in_collision(player)
