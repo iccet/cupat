@@ -2,14 +2,14 @@ import math
 from vector import Vector
 
 
-def circumscribed_radius(obj):
+def square_mask(obj):
     x_component = tuple(Vector.component(obj.collision, 0))
     y_component = tuple(Vector.component(obj.collision, 1))
-    min_x = min(x_component)
-    min_y = min(y_component)
-    max_x = max(x_component)
-    max_y = max(y_component)
+    return min(x_component), min(y_component), max(x_component), max(y_component)
 
+
+def circumscribed_radius(obj):
+    min_x, min_y, max_x, max_y = square_mask(obj)
     return abs(Vector(max_x, max_y) - Vector(min_x, min_y)) / 2
 
 
@@ -20,7 +20,7 @@ def regular(radius: float, n: int = 4) -> list:
     @return: List of points enclosing an @n-compound box primitive around the @collision_base
     @rtype: list
     """
-    if not isinstance(n, int) or n < 2:
+    if not isinstance(n, int) or n < 3:
         raise TypeError
 
     step = 2 * math.pi / n

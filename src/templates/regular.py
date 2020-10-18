@@ -5,7 +5,7 @@ from src.core.objects.render import RenderObject
 from src.core.objects.physic import PhysicObject
 from src.core.objects.attachable import AttachableObject
 from samples.colors import Colors
-from utils import regular, circumscribed_radius
+from utils.regular import regular, circumscribed_radius
 
 DEFAULT_COLOR = DC = Colors.WHITE
 

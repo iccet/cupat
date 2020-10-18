@@ -53,5 +53,5 @@ class GameFrame(QFrame):
         self.game.player.ready = True
 
     def update(self):
-        self.ui.forceLcdNumber.display(abs(self.game._random_force.value))
-        self.ui.speedLcdNumber.display(abs(self.game.player.speed.value))
+        self.ui.forceLcdNumber.display(abs(self.game._random_force.target))
+        self.ui.speedLcdNumber.display(abs(self.game.player.speed.target))

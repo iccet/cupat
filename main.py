@@ -5,6 +5,8 @@ import sys
 import subprocess
 import os
 import logging
+import random
+
 
 LOGGING_FORMAT = '%(levelname)s %(asctime)-15s Module %(module)s %(message)s'
 
@@ -25,6 +27,7 @@ def ui_convert():
 
 
 def main():
+    random.seed()
     logging.basicConfig(format=LOGGING_FORMAT)
     BaseObject.logger = logging.getLogger('core')
     os.chdir(os.path.dirname(__file__))

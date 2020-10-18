@@ -22,7 +22,6 @@ class RandomForce(IImpact, Force):
         pass
 
     def random(self):
-        random.seed()
         rnd = random.randint(*self.__range)
         self.target = Vector([random.random() * rnd for _ in range(2)])
 
